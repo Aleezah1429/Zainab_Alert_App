@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getDatabase,ref,set } = require("firebase/database");
+const { getDatabase,ref,set,get,child } = require("firebase/database");
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3m62S5hZsQbrLhSTkgv25ppDxMc1SINY",
@@ -16,17 +16,32 @@ const app = initializeApp(firebaseConfig);
 
 // Get a reference to the database service
 const database = getDatabase(app);
+const databaseRef = ref(getDatabase()) 
 
 
+function postChildFoundInfo(req,res) {
+  set(ref(database, `ChildFoundInfo/${req.body.childName}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`), {
+    childName: req.body.childName,
+    fatherName: req.body.fatherName,
+    gender : req.body.gender,
+    age : req.body.age,
+    phoneNo : req.body.phoneNo,
+    city : req.body.city
+  });
+}
 
-function postChildFoundInfo(childName, fatherName, gender, age, phoneNo, city) {
-  set(ref(database, 'ChildFoundInfo/'), {
-    childname: childName,
-    childfathername: fatherName,
-    childgender : gender,
-    childage : age,
-    phoneno : phoneNo,
-    city : city
+function getChildFoundInfo(req,res) {
+  get(child(databaseRef, 'ChildFoundInfo')).then((snapshot) => {
+    console.log("SNAP",snapshot.exists())
+    if (snapshot.exists()) {
+      res.send(snapshot.val())
+      console.log(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    res.send(error)
+    console.error(error);
   });
 }
 
@@ -37,4 +52,4 @@ function postChildFoundInfo(childName, fatherName, gender, age, phoneNo, city) {
 
 
 // module.exports = database;
-module.exports= {postChildFoundInfo}
+module.exports= {postChildFoundInfo,getChildFoundInfo}

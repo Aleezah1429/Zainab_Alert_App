@@ -4,8 +4,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-const {postChildFoundInfo } = require("./firebase")
-
+const {postChildFoundInfo,getChildFoundInfo } = require("./firebase")
 
 
 app.post("/ChildFound", (req, res) => {
@@ -13,7 +12,10 @@ app.post("/ChildFound", (req, res) => {
     postChildFoundInfo(req, res);
 });
 
+app.get('/ChildFOundData', (req, res) => {
+getChildFoundInfo(req,res)
 
+})
 // // Import Admin SDK
 // const { getDatabase } = require('firebase-admin/database');
 
@@ -45,11 +47,7 @@ app.post("/ChildFound", (req, res) => {
 
 
 
-// app.get('/SignUp', (req, res) => {
-//     res.send("data")
-//     console.log("Login",req.body);
 
-// })
 
 
 // app.post("/ForgetEmail",(req,res)=>{
