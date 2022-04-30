@@ -19,14 +19,33 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+// import firebase from "firebase"
 
+// import ImagePicker from 'react-native-image-picker';
 
-import ImagePicker from 'react-native-image-picker';
-
-// import { Picker } from '@react-native-picker/picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 // import ImagePicker from 'react-native-image-picker/lib/commonjs';
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
 
+// Set the configuration for your app
+// TODO: Replace with your app's config object
+const firebaseConfig = {
+    apiKey: "AIzaSyD3m62S5hZsQbrLhSTkgv25ppDxMc1SINY",
+    authDomain: "zainab-alert025.firebaseapp.com",
+    databaseURL: "https://zainab-alert025-default-rtdb.firebaseio.com",
+    projectId: "zainab-alert025",
+    storageBucket: "zainab-alert025.appspot.com",
+    messagingSenderId: "132517567612",
+    appId: "1:132517567612:web:8ddb935903dc0e29abbdf9",
+    measurementId: "G-WZZKN7TMF7"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+
+// Get a reference to the storage service, which is used to create references in your storage bucket
+const storage = getStorage(firebaseApp);
 const ChildLost = () => {
+
     const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {
@@ -38,14 +57,14 @@ const ChildLost = () => {
     const selectThumbnail = () => {
 
         const options = {
-            title: 'Select Avatar',
+            title: 'Select Images',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
             },
         };
 
-        ImagePicker.showImagePicker(options, (response) => {
+        launchImageLibrary(options, (response) => {
             console.log('Response = ', response);
 
             if (response.didCancel) {
@@ -53,12 +72,12 @@ const ChildLost = () => {
             } else if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
             } else {
-                const uri = response.uri;
+                var uri =  response.assets[0].uri;
+                var title =  response.assets[0].fileName
                 console.log('Uri', uri)
-                const imageName = title + "_thumbnail"
                 firebase
                     .storage()
-                    .ref(imageName)
+                    .ref("MissingChilds/"+title)
                     .putFile(uri)
                     .then((snapshot) => {
                         //You can check the image is now uploaded in the storage bucket
@@ -67,13 +86,13 @@ const ChildLost = () => {
                     .catch((e) => console.log('uploading image error => ', e));
 
                 // __Retrieve Image From Firebase Cloud Storage__
-                let imageRef = firebase.storage().ref('/' + imageName);
+                let imageRef = firebase.storage().ref("MissingChilds/"+title);
                 imageRef
                     .getDownloadURL()
                     .then((url) => {
-                        console.log("thumbnail", url)
+                        console.log("DOWNLOAD", url)
                         //from url you can fetched the uploaded image easily
-                        setthumbnail(url)
+                        // setthumbnail(url)
                     })
                     .catch((e) => console.log('getting downloadURL of image error => ', e));
             }
@@ -131,13 +150,13 @@ const ChildLost = () => {
             </View>
 
 
-            <View style={{ paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036", alignSelf: "flex-start" }}>
+            {/* <View style={{ paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036", alignSelf: "flex-start" }}>
                 <Text onPress={() => selectVideo()}>Add Video</Text>
             </View>
 
             <View style={{ margin: "3%", paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036" }}>
                 <Text onPress={() => post_video()}>POST</Text>
-            </View>
+            </View> */}
 
 
 

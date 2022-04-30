@@ -17,7 +17,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Home = () => {
+const Home = (props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -33,13 +33,13 @@ const Home = () => {
       </Text>
       <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1, }}>
         <View style={{ height:100, marginTop: 200, width: 100, borderRadius: 20, backgroundColor:"#00cc99"}}> 
-          <TouchableOpacity style={{margin:10}}>
+          <TouchableOpacity onPress={()=>props.navigation.navigate("ChildFound")} style={{margin:10}}>
             <Image style={styles.image} source={require("../assets/Found.png")} />
           </TouchableOpacity>
           <Text style={styles.Image_Heading}>Report Found Child</Text>
         </View>
         <View style={{ height:100, marginTop: 200, width: 100, marginLeft: 35, borderRadius: 20, backgroundColor:"#00cc99"}}>
-        <TouchableOpacity style={{margin:10}}>
+        <TouchableOpacity onPress={()=>props.navigation.navigate("ChildLost")} style={{margin:10}}>
             <Image style={styles.image} source={require("../assets/missing.png")} />
           </TouchableOpacity>
           <Text style={styles.Image_Heading}>Report Missing Child</Text>

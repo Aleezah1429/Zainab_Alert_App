@@ -16,8 +16,8 @@ export default function Navigator(props) {
         headerStyle: { elevation: 0 },
         cardStyle: { backgroundColor: 'black' }
     }} >
-            {/* <Stack.Screen name="Home" component={Home} options={{ title:"Home" }} /> */}
-            {/* <Stack.Screen name="ChildLost" component={ChildLost} options={{ title:"Report Missing Child" }} /> */}
+            <Stack.Screen name="Home" component={Home} options={{ title:"Home" }} />
+            <Stack.Screen name="ChildLost" component={ChildLost} options={{ title:"Report Missing Child" }} />
             <Stack.Screen name="ChildFound" component={ChildFound} options={{ title:"Report Found Child" }} />
 
             </Stack.Navigator>

@@ -27,6 +27,14 @@ function postChildFoundInfo(req,res) {
     age : req.body.age,
     phoneNo : req.body.phoneNo,
     city : req.body.city
+  }).then(() => {
+    res.send({message:"Found Child Posted Successfully",status:"success"})
+    // Data saved successfully!
+  })
+  .catch((error) => {
+    res.send({message:error,status:"danger"})
+
+    // The write failed...
   });
 }
 
@@ -46,10 +54,39 @@ function getChildFoundInfo(req,res) {
 }
 
 
-// const db = firebase.database()
-// const User = db.collection("Users")
-// // const analytics = getAnalytics(app);
+function postChildMissingInfo(req,res) {
+  set(ref(database, `ChildMissingInfo/${req.body.childName}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`), {
+    childName: req.body.childName,
+    fatherName: req.body.fatherName,
+    gender : req.body.gender,
+    age : req.body.age,
+    phoneNo : req.body.phoneNo,
+    city : req.body.city
+  }).then(() => {
+    res.send({message:"Missing Child Posted Successfully",status:"success"})
+    // Data saved successfully!
+  })
+  .catch((error) => {
+    res.send({message:error,status:"danger"})
+
+    // The write failed...
+  });
+}
+
+function getChildMissingInfo(req,res) {
+  get(child(databaseRef, 'ChildMissingInfo')).then((snapshot) => {
+    console.log("SNAP",snapshot.exists())
+    if (snapshot.exists()) {
+      res.send(snapshot.val())
+      console.log(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    res.send(error)
+    console.error(error);
+  });
+}
 
 
-// module.exports = database;
-module.exports= {postChildFoundInfo,getChildFoundInfo}
+module.exports= {postChildFoundInfo,getChildFoundInfo,postChildMissingInfo,getChildMissingInfo}
