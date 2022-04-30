@@ -26,7 +26,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 // import ImagePicker from 'react-native-image-picker/lib/commonjs';
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import { getStorage,uploadBytes,ref  } from "firebase/storage";
 
 // Set the configuration for your app
 // TODO: Replace with your app's config object
@@ -75,26 +75,30 @@ const ChildLost = () => {
                 var uri =  response.assets[0].uri;
                 var title =  response.assets[0].fileName
                 console.log('Uri', uri)
-                firebase
-                    .storage()
-                    .ref("MissingChilds/"+title)
-                    .putFile(uri)
-                    .then((snapshot) => {
-                        //You can check the image is now uploaded in the storage bucket
-                        console.log(`${imageName} has been successfully uploaded.`);
-                    })
-                    .catch((e) => console.log('uploading image error => ', e));
+                const storageRef= ref(storage, 'images/test.jpg');
+                uploadBytes(storageRef, response.assets[0]).then((snapshot) => {
+                    console.log('Uploaded a blob or file!');
+                  });
+                // firebase
+                //     .storage()
+                //     .ref("MissingChilds/"+title)
+                //     .putFile(uri)
+                //     .then((snapshot) => {
+                //         //You can check the image is now uploaded in the storage bucket
+                //         console.log(`${imageName} has been successfully uploaded.`);
+                //     })
+                //     .catch((e) => console.log('uploading image error => ', e));
 
                 // __Retrieve Image From Firebase Cloud Storage__
-                let imageRef = firebase.storage().ref("MissingChilds/"+title);
-                imageRef
-                    .getDownloadURL()
-                    .then((url) => {
-                        console.log("DOWNLOAD", url)
-                        //from url you can fetched the uploaded image easily
-                        // setthumbnail(url)
-                    })
-                    .catch((e) => console.log('getting downloadURL of image error => ', e));
+                // let imageRef = firebase.storage().ref("MissingChilds/"+title);
+                // imageRef
+                //     .getDownloadURL()
+                //     .then((url) => {
+                //         console.log("DOWNLOAD", url)
+                //         //from url you can fetched the uploaded image easily
+                //         // setthumbnail(url)
+                //     })
+                //     .catch((e) => console.log('getting downloadURL of image error => ', e));
             }
 
         });
@@ -103,42 +107,42 @@ const ChildLost = () => {
 
 
     // ___select video function to open video library__
-    const selectVideo = () => {
-        ImagePicker.launchImageLibrary({ mediaType: 'video', includeBase64: true }, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled Video picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                const uri = response.uri;
+    // const selectVideo = () => {
+    //     ImagePicker.launchImageLibrary({ mediaType: 'video', includeBase64: true }, (response) => {
+    //         if (response.didCancel) {
+    //             console.log('User cancelled Video picker');
+    //         } else if (response.error) {
+    //             console.log('ImagePicker Error: ', response.error);
+    //         } else {
+    //             const uri = response.uri;
 
-                console.log('VideoUri', uri)
+    //             console.log('VideoUri', uri)
 
-                const videoName = title + "_video"
-                firebase
-                    .storage()
-                    .ref(videoName)
-                    .putFile(uri)
-                    .then((snapshot) => {
-                        //You can check the Video is now uploaded in the storage bucket
-                        console.log(`${videoName} has been successfully uploaded.`);
-                    })
-                    .catch((e) => console.log('uploading Video error => ', e));
+    //             const videoName = title + "_video"
+    //             firebase
+    //                 .storage()
+    //                 .ref(videoName)
+    //                 .putFile(uri)
+    //                 .then((snapshot) => {
+    //                     //You can check the Video is now uploaded in the storage bucket
+    //                     console.log(`${videoName} has been successfully uploaded.`);
+    //                 })
+    //                 .catch((e) => console.log('uploading Video error => ', e));
 
-                // __Retrieve Video From Firebase Cloud Storage__
-                let imageRef = firebase.storage().ref('/' + videoName);
-                imageRef
-                    .getDownloadURL()
-                    .then((url) => {
-                        console.log("video", url)
+    //             // __Retrieve Video From Firebase Cloud Storage__
+    //             let imageRef = firebase.storage().ref('/' + videoName);
+    //             imageRef
+    //                 .getDownloadURL()
+    //                 .then((url) => {
+    //                     console.log("video", url)
 
-                        //from url you can fetched the uploaded Video easily
-                        seturi(url)
-                    })
-                    .catch((e) => console.log('getting downloadURL of Video error => ', e));
-            }
-        })
-    }
+    //                     //from url you can fetched the uploaded Video easily
+    //                     seturi(url)
+    //                 })
+    //                 .catch((e) => console.log('getting downloadURL of Video error => ', e));
+    //         }
+    //     })
+    // }
 
 
     return (
