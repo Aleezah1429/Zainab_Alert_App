@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "132517567612",
+    "firebase_url": "https://zainab-alert025-default-rtdb.firebaseio.com",
+    "project_id": "zainab-alert025",
+    "storage_bucket": "zainab-alert025.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132517567612:android:45f06ca71e124715abbdf9",
+        "android_client_info": {
+          "package_name": "com.zainabalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132517567612-661b59ok9puesdfk1qu0vmdo549dk19c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIOqifiggJY_v61kS9RAE1zkzefRtETf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132517567612-661b59ok9puesdfk1qu0vmdo549dk19c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

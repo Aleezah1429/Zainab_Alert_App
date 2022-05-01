@@ -20,31 +20,17 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 // import firebase from "firebase"
+import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
+import { useState } from 'react';
 
-// import ImagePicker from 'react-native-image-picker';
-
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-// import ImagePicker from 'react-native-image-picker/lib/commonjs';
-import { initializeApp } from "firebase/app";
-import { getStorage,uploadBytes,ref  } from "firebase/storage";
-
-// Set the configuration for your app
-// TODO: Replace with your app's config object
-const firebaseConfig = {
-    apiKey: "AIzaSyD3m62S5hZsQbrLhSTkgv25ppDxMc1SINY",
-    authDomain: "zainab-alert025.firebaseapp.com",
-    databaseURL: "https://zainab-alert025-default-rtdb.firebaseio.com",
-    projectId: "zainab-alert025",
-    storageBucket: "zainab-alert025.appspot.com",
-    messagingSenderId: "132517567612",
-    appId: "1:132517567612:web:8ddb935903dc0e29abbdf9",
-    measurementId: "G-WZZKN7TMF7"
-};
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Get a reference to the storage service, which is used to create references in your storage bucket
-const storage = getStorage(firebaseApp);
 const ChildLost = () => {
+    const [childId,setChildId] = useState("")
+    const [childName, setChildName] = useState("");
+    const [fatherName, setFatherName] = useState("");
+    const [gender, setGender] = useState("");
+    const [age, setAge] = useState("");
+    const [phoneNo, setPhoneNo] = useState("");
+    const [city, setCity] = useState("");
 
     const isDarkMode = useColorScheme() === 'dark';
 
@@ -54,116 +40,32 @@ const ChildLost = () => {
 
 
     // ___THUMBNAIL FUNC___
-    const selectThumbnail = () => {
+    const selectImage = async() => {
+       await setChildId(`${childName}-Missing-${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`)
 
         const options = {
-            title: 'Select Images',
+            title: 'Select Child Images',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
+            
             },
+            
         };
-
-        launchImageLibrary(options, (response) => {
+        const response = await MultipleImagePicker.openPicker(options);
             console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                var uri =  response.assets[0].uri;
-                var title =  response.assets[0].fileName
-                console.log('Uri', uri)
-                const storageRef= ref(storage, 'images/test.jpg');
-                uploadBytes(storageRef, response.assets[0]).then((snapshot) => {
-                    console.log('Uploaded a blob or file!');
-                  });
-                // firebase
-                //     .storage()
-                //     .ref("MissingChilds/"+title)
-                //     .putFile(uri)
-                //     .then((snapshot) => {
-                //         //You can check the image is now uploaded in the storage bucket
-                //         console.log(`${imageName} has been successfully uploaded.`);
-                //     })
-                //     .catch((e) => console.log('uploading image error => ', e));
-
-                // __Retrieve Image From Firebase Cloud Storage__
-                // let imageRef = firebase.storage().ref("MissingChilds/"+title);
-                // imageRef
-                //     .getDownloadURL()
-                //     .then((url) => {
-                //         console.log("DOWNLOAD", url)
-                //         //from url you can fetched the uploaded image easily
-                //         // setthumbnail(url)
-                //     })
-                //     .catch((e) => console.log('getting downloadURL of image error => ', e));
-            }
-
-        });
+response.forEach(async(res)=>{
+    console.log("path",res.realPath)
+    const reference = storage().ref(`ChildMissing/${childId}/${res.fileName}`);
+   await reference.putFile(res.realPath)
+})
 
     }
 
 
-    // ___select video function to open video library__
-    // const selectVideo = () => {
-    //     ImagePicker.launchImageLibrary({ mediaType: 'video', includeBase64: true }, (response) => {
-    //         if (response.didCancel) {
-    //             console.log('User cancelled Video picker');
-    //         } else if (response.error) {
-    //             console.log('ImagePicker Error: ', response.error);
-    //         } else {
-    //             const uri = response.uri;
-
-    //             console.log('VideoUri', uri)
-
-    //             const videoName = title + "_video"
-    //             firebase
-    //                 .storage()
-    //                 .ref(videoName)
-    //                 .putFile(uri)
-    //                 .then((snapshot) => {
-    //                     //You can check the Video is now uploaded in the storage bucket
-    //                     console.log(`${videoName} has been successfully uploaded.`);
-    //                 })
-    //                 .catch((e) => console.log('uploading Video error => ', e));
-
-    //             // __Retrieve Video From Firebase Cloud Storage__
-    //             let imageRef = firebase.storage().ref('/' + videoName);
-    //             imageRef
-    //                 .getDownloadURL()
-    //                 .then((url) => {
-    //                     console.log("video", url)
-
-    //                     //from url you can fetched the uploaded Video easily
-    //                     seturi(url)
-    //                 })
-    //                 .catch((e) => console.log('getting downloadURL of Video error => ', e));
-    //         }
-    //     })
-    // }
-
-
     return (
 
-        <View >
-
-            <View style={{ paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036", alignSelf: "flex-start", marginBottom: "5%" }}>
-                <Text onPress={() => selectThumbnail()}>Add Thumbnail</Text>
-            </View>
-
-
-            {/* <View style={{ paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036", alignSelf: "flex-start" }}>
-                <Text onPress={() => selectVideo()}>Add Video</Text>
-            </View>
-
-            <View style={{ margin: "3%", paddingLeft: "10%", paddingRight: "10%", backgroundColor: "#380036" }}>
-                <Text onPress={() => post_video()}>POST</Text>
-            </View> */}
-
-
-
+        <ScrollView  >
 
             <Text style={styles.logo}>
                 Report Mis
@@ -225,8 +127,11 @@ const ChildLost = () => {
                     placeholder="City"
                 />
             </View>
+            <View style={{ padding: "4%",  backgroundColor: "#00cc99", alignSelf: "flex-start",borderRadius:30,margin:10,paddingRight:30 }}>
+                <Text style={styles.text} onPress={() => selectImage()}>Add Images of Child</Text>
+            </View>
 
-        </View>
+        </ScrollView>
     );
 };
 
@@ -251,8 +156,9 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     text: {
-        marginLeft: 22,
-        fontSize: 15
+        marginLeft: 20,
+        fontSize: 16,
+        fontWeight:"bold"
     }
 
 });
