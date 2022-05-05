@@ -22,7 +22,7 @@ import {
 // import firebase from "firebase"
 import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
 import { useState } from 'react';
-
+import storage from '@react-native-firebase/storage';
 const ChildLost = () => {
     const [childId,setChildId] = useState("")
     const [childName, setChildName] = useState("");
