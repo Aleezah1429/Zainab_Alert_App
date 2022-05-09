@@ -20,9 +20,9 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-// import firebase from "firebase"
 import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+
 
 const ChildLost = () => {
     const [childId, setChildId] = useState("")
