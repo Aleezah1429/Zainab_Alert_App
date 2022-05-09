@@ -12,7 +12,7 @@ import {
     TextInput,
     Button,
 } from 'react-native';
-
+import storage from '@react-native-firebase/storage';
 import {
     Colors,
     DebugInstructions,
@@ -21,14 +21,19 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const ChildFound = () => {
+import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
 
+const ChildFound = () => {
+    const [childId, setChildId] = useState("")
     const [childName, setChildName] = useState("");
     const [fatherName, setFatherName] = useState("");
     const [gender, setGender] = useState("");
     const [age, setAge] = useState("");
     const [phoneNo, setPhoneNo] = useState("");
     const [city, setCity] = useState("");
+
+    // state for disable button
+    const [disable, setDisable] = useState(true)
 
 
     const isDarkMode = useColorScheme() === 'dark';
@@ -37,19 +42,48 @@ const ChildFound = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
+    // ___Child Image Select Func___
+    const selectImage = async () => {
+        var myChildID = `${childName}-Found-${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`
+        await setChildId(myChildID)
+        const options = {
+            title: 'Select Child Images',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+
+            },
+
+        };
+        const response = await MultipleImagePicker.openPicker(options);
+        console.log('Response = ', response);
+        response.forEach(async (res) => {
+            console.log("path", res.realPath)
+            const reference = storage().ref(`ChildFound/${myChildID}/${res.fileName}`);
+            await reference.putFile(res.realPath)
+        })
+
+    }
+
 
     const Submit = () => {
-        console.log(childName, fatherName, gender, age, phoneNo, city)
+        console.log(childId, childName, fatherName, gender, age, phoneNo, city)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ childName, fatherName, gender, age, phoneNo, city })
+            body: JSON.stringify({childId, childName, fatherName, gender, age, phoneNo, city })
         };
-        fetch('http://localhost:8001/ChildFound', requestOptions)
+        fetch('https://zainab-alert.herokuapp.com/ChildFoundPost', requestOptions)
             .then(response => response.json())
-            // .then(data => setMsg(data.message));
+            .then(data => console.log("Data", data));
 
     }
+
+    useEffect(()=>{
+        if(childName != "" && fatherName != "" && gender != "" && age != "" && phoneNo != "" && city != ""){
+            setDisable(false)
+        }
+    },[childName, fatherName, gender, age, phoneNo,city])
 
     return (
         <ScrollView>
@@ -114,14 +148,17 @@ const ChildFound = () => {
                     placeholder="City"
                 />
             </View>
+
+            <View style={{ padding: "4%", backgroundColor: "#00cc99", alignSelf: "flex-start", borderRadius: 30, margin: 10, paddingRight: 30 }}>
+                <Text style={styles.text} onPress={() => selectImage()} disabled={disable}>Add Images of Child</Text>
+            </View>
+
             <View style={styles.button}>
                 <Button
                     color="#00cc99"
                     title="Submit"
                     onPress={() => Submit()} />
             </View>
-
-            {/* </form> */}
         </ScrollView>
 
     );

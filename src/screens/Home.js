@@ -45,6 +45,14 @@ const Home = (props) => {
           <Text style={styles.Image_Heading}>Report Missing Child</Text>
         </View>
       </View>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1, }}>
+        <View style={{ height:100, marginTop: 600, width: 100, borderRadius: 20, backgroundColor:"#00cc99"}}> 
+          <TouchableOpacity onPress={()=>props.navigation.navigate("Result")} style={{margin:10}}>
+            <Image style={styles.image} source={require("../assets/result.png")} />
+          </TouchableOpacity>
+          <Text style={styles.Image_Heading}>Result</Text>
+        </View>
+      </View>
     </View>
   );
 };
