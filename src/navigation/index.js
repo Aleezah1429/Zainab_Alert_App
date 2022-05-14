@@ -6,7 +6,8 @@ import Home from "../screens/Home";
 import ChildLost from "../screens/ChildLost";
 import ChildFound from "../screens/ChildFound";
 import Result from "../screens/Result"
-
+import Login from '../screens/Login';
+import Signup from '../screens/Signup';
 
 const Stack = createStackNavigator();
 
@@ -17,10 +18,14 @@ export default function Navigator(props) {
         headerStyle: { elevation: 0 },
         cardStyle: { backgroundColor: 'black' }
     }} >
-            <Stack.Screen name="Home" component={Home} options={{ title:"Home" }} />
-            <Stack.Screen name="ChildLost" component={ChildLost} options={{ title:"Report Missing Child" }} />
-            <Stack.Screen name="ChildFound" component={ChildFound} options={{ title:"Report Found Child" }} />
-            <Stack.Screen name="Result" component={Result} options={{ title:"Result" }} />
+        <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
+            <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}} />
+            <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
+            <Stack.Screen name="ChildLost" component={ChildLost} options={{headerShown:false}}/>
+            <Stack.Screen name="ChildFound" component={ChildFound} options={{headerShown:false}} />
+            <Stack.Screen name="Result" component={Result} options={{headerShown:false}} />
+            
+
 
             </Stack.Navigator>
         </NavigationContainer>

@@ -21,7 +21,7 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 
 const ChildLost = () => {
@@ -45,7 +45,7 @@ const ChildLost = () => {
 
     // ___Child Image Select Func___
     const selectImage = async () => {
-        var myChildID = `${childName}-Lost-${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`
+        var myChildID = `${childName}-Missing-${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`
         await setChildId(myChildID)
         const options = {
             title: 'Select Child Images',
